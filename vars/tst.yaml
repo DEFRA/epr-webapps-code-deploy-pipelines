@@ -1,0 +1,3 @@
+variables:
+  azureSubscription: 'AZD-RWD-TST1'
+  acr.azureContainerRegistryName: 'tstrwdinfac1401'

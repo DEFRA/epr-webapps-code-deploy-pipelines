@@ -1,0 +1,112 @@
+parameters:
+- name: envToDeploy
+  displayName: 'This pipeline will delete existing images:
+                - feature: if selected all images with name started with <feature>;
+                - x days ago: all images regardless name created x days ago!!
+                Unless protected with put-a-lock pipeline
+                https://dev.azure.com/defragovuk/RWD-CPR-EPR4P-ADO/_build?definitionId=4670'
+  type: string
+  values:
+    - development
+  default: development
+- name: enableDelete
+  displayName: 'Mark checked - docker tags WILL BE DELETED.
+                Leaving it uncheck with make a dry run only.
+                Do not mark this check until you are absolutely sure.'
+  type: boolean
+  default: false
+- name: imageTagSpecification
+  type: string
+  default: '60 days ago'
+  values:
+  - '30 days ago'
+  - '60 days ago'
+  - 'feature'
+  displayName: 'Pick one option - affects all images in repository'
+- name: repositoryName
+  type: string
+  displayName: 'Provide name of the repository (like backendaccountserviceregistry or eprpackagingfrontendrepository)'
+
+pool: DEFRA-COMMON-ubuntu2004-SSV3
+
+variables:
+  - ${{ if eq(parameters.envToDeploy, 'development') }}:
+    - template: vars/${{ parameters.envToDeploy }}.yaml
+
+stages:
+  - stage: Validate
+    jobs:
+    - deployment: 'DeleteACRImages'
+      environment: ${{ parameters.envToDeploy }}
+      strategy:
+        runOnce:
+          deploy:
+            steps:
+              - task: AzureCLI@2
+                condition: eq('${{parameters.imageTagSpecification}}', 'feature')
+                displayName: "Deleting all Features"
+                inputs:
+                  azureSubscription: ${{ variables['azureSubscription'] }}
+                  scriptLocation: 'inlineScript'
+                  scriptType: 'bash'
+                  inlineScript: |
+                    echo -e "\033[0;32m Deleting dockerImage --> ${{variables['acr.azureContainerRegistryName']}}, deleting: ${{ parameters.imageTagSpecification }} in env --> ${{ parameters.envToDeploy }}"
+
+                    REGISTRY=$(acr.azureContainerRegistryName)
+                    REPOSITORY=${{ parameters.repositoryName }}
+                    IMAGETAGSPECIFICATION=${{parameters.imageTagSpecification}}
+
+                    PURGE_CMD="acr purge --filter '$REPOSITORY:^$IMAGETAGSPECIFICATION.*' --untagged --ago 1d"
+                    if ${{ lower(parameters.enableDelete) }}
+                    then
+                      echo -e "\033[0;32m Performing cleanup for $REPOSITORY"
+                      az acr run --registry $REGISTRY \
+                        --cmd "$PURGE_CMD" \
+                        /dev/null
+                    else
+                      echo -e "\033[0;32m No data deleted."
+                      az acr run --registry $REGISTRY \
+                        --cmd "$PURGE_CMD --dry-run" \
+                        /dev/null
+                    fi
+
+              - task: AzureCLI@2
+                condition: or( eq('${{parameters.imageTagSpecification}}', '30 days ago'), eq('${{parameters.imageTagSpecification}}', '60 days ago'))
+                displayName: "Deleting older than..."
+                inputs:
+                  azureSubscription: ${{ variables['azureSubscription'] }}
+                  scriptLocation: 'inlineScript'
+                  scriptType: 'bash'
+                  inlineScript: |
+                    echo -e "\033[0;32m Deleting dockerImage --> ${{variables['acr.azureContainerRegistryName']}}, deleting ${{ parameters.imageTagSpecification }} in env --> ${{ parameters.envToDeploy }}"
+
+                    REGISTRY=$(acr.azureContainerRegistryName)
+                    REPOSITORY=${{ parameters.repositoryName }}
+                    TIMESTAMP=$(date -d "${{parameters.imageTagSpecification}}" +"%Y-%m-%d")
+
+                    if ${{ lower(parameters.enableDelete) }}
+                    then
+                      echo -e "\033[0;32m Performing cleanup for $REPOSITORY"
+                      az acr manifest list-metadata --name $REPOSITORY --registry $REGISTRY \
+                      --orderby time_asc --query "[?lastUpdateTime < '$TIMESTAMP'].digest" -o tsv \
+                      | xargs -I% az acr repository delete --name $REGISTRY --image $REPOSITORY@% --yes
+
+                    else
+                      echo -e "\033[0;32m No data deleted."
+                      echo -e "\033[0;32m Image candidates for deleting, with parameter '${{parameters.imageTagSpecification}}'"
+                      az acr manifest list-metadata --name $REPOSITORY --registry $REGISTRY \
+                        --orderby time_asc --query "[?lastUpdateTime < '$TIMESTAMP'].tags" -o tsv
+                      echo ""
+                      echo -e "\033[0;32m After deleting, with parameter '${{parameters.imageTagSpecification}}' these will be left untouched:"
+                      az acr manifest list-metadata --name $REPOSITORY --registry $REGISTRY \
+                        --orderby time_asc --query "[?lastUpdateTime > '$TIMESTAMP'].tags" -o tsv
+                    fi
+
+              - task: AzureCLI@2
+                inputs:
+                  azureSubscription: ${{ variables['azureSubscription'] }}
+                  scriptLocation: 'inlineScript'
+                  scriptType: 'bash'
+                  inlineScript: |
+                    echo "Deleting dockerImage --> ${{variables['acr.azureContainerRegistryName']}}, created ${{ parameters.imageTagSpecification }} in env --> ${{ parameters.envToDeploy }} COMPLETED"
+                displayName: "Show Deletion Details"

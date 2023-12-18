@@ -1,0 +1,39 @@
+trigger: none
+
+pool: DEFRA-COMMON-ubuntu2004-SSV3
+
+parameters:
+  - name: envName
+    displayName: Lock image in these environments
+    type: object
+    default:
+      - DEV
+      - TST
+      - PRE
+      - PRD
+  - name: repositoryDockerTag
+    displayName: 'Provide REPOSITORY:DOCKERTAG (in this format) information of approved image '
+    type: string
+    default: ""
+
+jobs:
+  - ${{ each envName in parameters.envName }}:
+    - job: Locking_Image_${{ envName }}
+
+      steps:
+        - task: AzureCLI@2
+          displayName: 'Putting a lock on ${{ envName }} image'
+          inputs:
+            ${{ if or( eq(envName, 'DEV'), eq(envName, 'TST') ) }}:
+              azureSubscription:  'AZD-RWD-${{ envName }}1'
+            ${{ if or( eq(envName, 'PRE'), eq(envName, 'PRD') ) }}:
+              azureSubscription:  'AZR-RWD-${{ envName }}1'
+            scriptType: 'bash'
+            scriptLocation: 'inlineScript'
+            inlineScript: |
+              az acr login --name ${{ lower(envName) }}rwdinfac1401
+              az acr repository update \
+                --name ${{ lower(envName) }}rwdinfac1401 --image ${{ parameters.repositoryDockerTag }} \
+                --delete-enabled false --write-enabled false
+
+

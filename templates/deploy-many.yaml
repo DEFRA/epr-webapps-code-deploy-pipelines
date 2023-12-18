@@ -1,0 +1,226 @@
+
+parameters:
+- name: teamName
+  type: string
+- name: envToDeploy
+  type: string
+- name: webResourceGroupName
+  type: string
+- name: updateSettings
+  type: boolean
+- name: frontends
+  type: object
+  default:
+  - repoName: FrontendAccountCreationMicroservice
+    varPath: pipelines/vars/
+    appService: DEVRWDWEBWAx402
+  - repoName: FrontendAccountManagementMicroservice
+    varPath: pipelines/vars/
+    appService: DEVRWDWEBWAx405
+  - repoName: FrontendAccountManagementMicroservice
+    varPath: pipelines/vars-regulator/
+    appService: DEVRWDWEBWAx412
+  - repoName: EprPackagingFrontend
+    varPath: pipelines/vars/
+    appService: DEVRWDWEBWAx410
+  - repoName: EprLoggingApi
+    varPath: pipelines/vars/
+    appService: DEVRWDWEBWAx403
+  - repoName: EprRegulatorEnrolmentFrontend
+    varPath: pipelines/vars/
+    appService: DEVRWDWEBWAx414
+  - repoName: EprRegulatorService
+    varPath: pipelines/vars/
+    appService: DEVRWDWEBWAx411
+  - repoName: FrontendObligationcheckerMicroservice
+    varPath: vars/
+    appService: DEVRWDWEBWAx401
+- name: functions
+  type: object
+  default:
+  - repoName: PomSubmissionCheckSplitter
+    varPath: pipelines/vars/
+    appService: DEVRWDWEBFAx403
+  - repoName: EprAntiVirusFunctionApp
+    varPath: pipelines/vars/
+    appService: DEVRWDWEBFAx405
+  - repoName: EprEventDispatcherFunctionApp
+    varPath: pipelines/vars/
+    appService: DEVRWDWEBFAx401
+  - repoName: EprPomFuncProducerValidation
+    varPath: pipelines/vars/
+    appService: DEVRWDWEBFAx402
+  - repoName: EprRegistrationValidationFunctionApp
+    varPath: pipelines/vars/
+    appService: DEVRWDWEBFAx404
+- name: facades
+  type: object
+  default:
+  - repoName: EprRegulatorServiceFacade
+    varPath: pipelines/vars/
+    appService: DEVRWDWEBWAx406
+  - repoName: FacadeAccountMicroservice
+    varPath: pipelines/vars/
+    appService: DEVRWDWEBWAx404
+  - repoName: FacadeAccountMicroservice
+    varPath: pipelines/vars-regulator/
+    appService: DEVRWDWEBWAx413
+  - repoName: EprPomApiSubmissionStatus
+    varPath: pipelines/vars/
+    appService: DEVRWDWEBWAx408
+  - repoName: EprPomApiWeb
+    varPath: pipelines/vars/
+    appService: DEVRWDWEBWAx409
+- name: backendService
+  type: object
+  default:
+  - repoName: BackendAccountMicroservice
+    varPath: pipelines/vars/
+    appService: DEVRWDWEBWAx407
+
+stages:
+- ${{ each service in parameters.functions }}:
+  - stage: Deploy_${{ service.repoName }}_to_${{ service.appService }}
+    ${{ if eq( parameters.updateSettings, 'true') }}:
+      dependsOn: UpdateSettings
+    ${{ else }}:
+      dependsOn: []
+    variables:
+    - template: /vars/mass-deployment/app-deployment.yaml
+      parameters:
+        envToDeploy: ${{ parameters.envToDeploy }}
+        resource: ${{ service.repoName }}
+        varPath: ${{service.varPath}}
+        teamName: ${{ parameters.teamName }}
+    - name: imageTag
+      value: $[variables.${{ service.appService }}]
+    - ${{ if or( eq(parameters.envToDeploy, 'development'), eq(parameters.envToDeploy, 'qa-dev4') )}}:
+      - name: targetEnvironment
+        value: development
+    - ${{ else }}:
+      - name: targetEnvironment
+        value: ${{ variables.env }}
+    jobs:
+    - template: epr-funcs-deployment-pipeline.yaml@CommonTemplates
+      parameters:
+        imageTag: $(imageTag)
+        azureSubscription: ${{ variables.azureSubscription }}
+        acrName: $(acr.azureContainerRegistryName)
+        registryName: $(acr.repositoryName)
+        serviceName: ${{ variables.serviceName }}
+        targetEnvironment: ${{ variables.targetEnvironment }}
+    - template: templates/restart-service.yaml@CommonTemplates
+      parameters:
+        subscriptionName: ${{ variables.azureSubscription }}
+        webResourceGroupName: ${{ parameters.webResourceGroupName }}
+        serviceName: ${{ variables.serviceName }}
+        targetEnvironment: ${{ variables.targetEnvironment }}
+
+- ${{ each service in parameters.backendService }}:
+  - stage: Deploy_${{ service.repoName }}_to_${{ service.appService }}
+    dependsOn:
+    - ${{ each functions in parameters.functions }}:
+      - Deploy_${{ functions.repoName }}_to_${{ functions.appService }}
+    variables:
+    - template: /vars/mass-deployment/app-deployment.yaml
+      parameters:
+        envToDeploy: ${{ parameters.envToDeploy }}
+        resource: ${{ service.repoName }}
+        varPath: ${{service.varPath}}
+        teamName: ${{ parameters.teamName }}
+    - name: imageTag
+      value: $[variables.${{ service.appService }}]
+    - ${{ if or( eq(parameters.envToDeploy, 'development'), eq(parameters.envToDeploy, 'qa-dev4') )}}:
+      - name: targetEnvironment
+        value: development
+    - ${{ else }}:
+      - name: targetEnvironment
+        value: ${{ variables.env }}
+    jobs:
+    - template: epr-deployment-pipeline.yaml@CommonTemplates
+      parameters:
+        imageTag: $(imageTag)
+        azureSubscription: ${{ variables.azureSubscription }}
+        acrName: $(acr.azureContainerRegistryName)
+        registryName: $(acr.repositoryName)
+        serviceName: ${{ variables.serviceName }}
+        targetEnvironment: ${{ variables.targetEnvironment }}
+    - template: templates/restart-service.yaml@CommonTemplates
+      parameters:
+        subscriptionName: ${{ variables.azureSubscription }}
+        webResourceGroupName: ${{ parameters.webResourceGroupName }}
+        serviceName: ${{ variables.serviceName }}
+        targetEnvironment: ${{ variables.targetEnvironment }}
+
+- ${{ each service in parameters.facades }}:
+  - stage: Deploy_${{ service.repoName }}_to_${{ service.appService }}
+    dependsOn:
+    - ${{ each backend in parameters.backendService }}:
+      - Deploy_${{ backend.repoName }}_to_${{ backend.appService }}
+    variables:
+    - template: /vars/mass-deployment/app-deployment.yaml
+      parameters:
+        envToDeploy: ${{ parameters.envToDeploy }}
+        resource: ${{ service.repoName }}
+        varPath: ${{service.varPath}}
+        teamName: ${{ parameters.teamName }}
+    - name: imageTag
+      value: $[variables.${{ service.appService }}]
+    - ${{ if or( eq(parameters.envToDeploy, 'development'), eq(parameters.envToDeploy, 'qa-dev4') )}}:
+      - name: targetEnvironment
+        value: development
+    - ${{ else }}:
+      - name: targetEnvironment
+        value: ${{ variables.env }}
+    jobs:
+    - template: epr-deployment-pipeline.yaml@CommonTemplates
+      parameters:
+        imageTag: $(imageTag)
+        azureSubscription: ${{ variables.azureSubscription }}
+        acrName: $(acr.azureContainerRegistryName)
+        registryName: $(acr.repositoryName)
+        serviceName: ${{ variables.serviceName }}
+        targetEnvironment: ${{ variables.targetEnvironment }}
+    - template: templates/restart-service.yaml@CommonTemplates
+      parameters:
+        subscriptionName: ${{ variables.azureSubscription }}
+        webResourceGroupName: ${{ parameters.webResourceGroupName }}
+        serviceName: ${{ variables.serviceName }}
+        targetEnvironment: ${{ variables.targetEnvironment }}
+
+- ${{ each service in parameters.frontends }}:
+  - stage: Deploy_${{ service.repoName }}_to_${{ service.appService }}
+    dependsOn:
+    - ${{ each facade in parameters.facades }}:
+      - Deploy_${{ facade.repoName }}_to_${{ facade.appService }}
+    variables:
+    - template: /vars/mass-deployment/app-deployment.yaml
+      parameters:
+        envToDeploy: ${{ parameters.envToDeploy }}
+        resource: ${{ service.repoName }}
+        varPath: ${{service.varPath}}
+        teamName: ${{ parameters.teamName }}
+    - name: imageTag
+      value: $[variables.${{ service.appService }}]
+    - ${{ if or( eq(parameters.envToDeploy, 'development'), eq(parameters.envToDeploy, 'qa-dev4') )}}:
+      - name: targetEnvironment
+        value: development
+    - ${{ else }}:
+      - name: targetEnvironment
+        value: ${{ variables.env }}
+    jobs:
+    - template: epr-deployment-pipeline.yaml@CommonTemplates
+      parameters:
+        imageTag: $(imageTag)
+        azureSubscription: ${{ variables.azureSubscription }}
+        acrName: $(acr.azureContainerRegistryName)
+        registryName: $(acr.repositoryName)
+        serviceName: ${{ variables.serviceName }}
+        targetEnvironment: ${{ variables.targetEnvironment }}
+    - template: templates/restart-service.yaml@CommonTemplates
+      parameters:
+        subscriptionName: ${{ variables.azureSubscription }}
+        webResourceGroupName: ${{ parameters.webResourceGroupName }}
+        serviceName: ${{ variables.serviceName }}
+        targetEnvironment: ${{ variables.targetEnvironment }}
+

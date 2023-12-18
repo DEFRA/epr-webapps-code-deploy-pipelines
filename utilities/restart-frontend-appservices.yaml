@@ -1,0 +1,37 @@
+trigger: none
+
+pool: DEFRA-COMMON-ubuntu2004-SSV3
+
+parameters:
+  - name: envName
+    displayName: Target deployment env
+    type: string
+    values:
+      - TST
+      - PRE
+      - PRD
+    default: PRD
+  - name: feAppServices
+    type: object
+    default:
+      - RWDWEBWA1402
+      - RWDWEBWA1405
+      - RWDWEBWA1410
+
+variables:
+  - ${{ if eq(parameters.envName, 'tst') }}:
+    - name: azureSubscription
+      value: 'AZD-RWD-'
+  - ${{ else }}:
+    - name: azureSubscription
+      value: 'AZR-RWD-'
+
+steps:
+  - ${{ each feAppService in parameters.feAppServices }}:
+    - task: AzureCLI@2
+      displayName: 'Restarting ${{ parameters.envName }}${{feAppService}}'
+      inputs:
+        azureSubscription:  $(azureSubscription)${{ parameters.envName }}1
+        scriptType: 'bash'
+        scriptLocation: 'inlineScript'
+        inlineScript: 'az webapp restart --name ${{ parameters.envName }}${{feAppService}} --resource-group ${{ parameters.envName }}RWDWEBRG1401'

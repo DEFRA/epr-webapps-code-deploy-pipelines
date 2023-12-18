@@ -1,0 +1,3 @@
+variables:
+  azureSubscription: 'AZR-RWD-PRD1'
+  acr.azureContainerRegistryName: 'prdrwdinfac1401'
