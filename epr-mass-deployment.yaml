@@ -30,13 +30,18 @@ parameters:
   - tst
   - preprod
   - prod
+- name: releaseVersion
+  displayName: 'Release version (e.g. Release-2.8.2). Leave empty for latest)'
+  default: ''
+  type: string
 
 resources:
   repositories:
+   # The repo will be reference the repo by a release tag (if the releaseVersion parameter contains 'release') otherwise it will pull down the main branch.
   - repository: EprAppConfigSettings
     name: RWD-CPR-EPR4P-ADO/epr-app-config-settings
     type: git
-    ref: main
+    ref: ${{ replace(replace(contains(parameters.releaseVersion, 'RELEASE'),'True',replace('refs/tags/RELEASETAG','RELEASETAG', parameters.releaseVersion)),'False','main') }}
   - repository: FrontendAccountCreationMicroservice
     name: RWD-CPR-EPR4P-ADO/frontend-accountcreation-microservice
     type: git

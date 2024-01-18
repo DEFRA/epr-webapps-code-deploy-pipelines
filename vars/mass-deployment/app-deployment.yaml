@@ -10,25 +10,25 @@ parameters:
     type: string
 
 variables:
-  - template: ../image-tags/common.yaml
+  - template: pipelines/image-tags/common.yaml@EprAppConfigSettings
   - ${{ if eq(parameters.envToDeploy, 'development') }}:
       - template: ${{ parameters.varPath }}/${{ parameters.teamName }}-${{ parameters.envToDeploy }}.yaml@${{ parameters.resource }}
-      - template: ../image-tags/development.yaml
-      - template: ../image-tags/${{ parameters.teamName }}-${{ parameters.envToDeploy }}.yaml
+      - template: pipelines/image-tags/development.yaml@EprAppConfigSettings
+      - template: pipelines/image-tags/${{ parameters.teamName }}-${{ parameters.envToDeploy }}.yaml@EprAppConfigSettings
       - name: env
         value: DEV1
   - ${{ elseif eq(parameters.envToDeploy, 'tst') }}:
       - template: ${{ parameters.varPath }}/${{ parameters.envToDeploy }}.yaml@${{ parameters.resource }}
-      - template: ../image-tags/${{ parameters.envToDeploy }}.yaml
+      - template: pipelines/image-tags/${{ parameters.envToDeploy }}.yaml@EprAppConfigSettings
       - name: env
         value: TST1
   - ${{ elseif eq(parameters.envToDeploy, 'preprod') }}:
       - template: ${{ parameters.varPath }}/${{ parameters.envToDeploy }}.yaml@${{ parameters.resource }}
-      - template: ../image-tags/${{ parameters.envToDeploy }}.yaml
+      - template: pipelines/image-tags/${{ parameters.envToDeploy }}.yaml@EprAppConfigSettings
       - name: env
         value: PRE1
   - ${{ elseif eq(parameters.envToDeploy, 'prod') }}:
       - template: ${{ parameters.varPath }}/${{ parameters.envToDeploy }}.yaml@${{ parameters.resource }}
-      - template: ../image-tags/${{ parameters.envToDeploy }}.yaml
+      - template: pipelines/image-tags/${{ parameters.envToDeploy }}.yaml@EprAppConfigSettings
       - name: env
         value: PRD1
