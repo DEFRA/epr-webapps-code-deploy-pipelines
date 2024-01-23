@@ -31,8 +31,8 @@ parameters:
   - preprod
   - prod
 - name: releaseVersion
-  displayName: 'Release version (e.g. Release-2.8.2). Leave empty for latest)'
-  default: ''
+  displayName: 'Release version (e.g. Release-2.8.2). In development environments you probably want to use latest as this will deploy from main branch using the latest commit)'
+  default: 'latest'
   type: string
 
 resources:
