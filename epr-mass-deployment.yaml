@@ -83,9 +83,10 @@ resources:
     type: git
     ref: main
   - repository: EprAntiVirusFunctionApp
-    name: RWD-CPR-EPR4P-ADO/epr-anti-virus-function-app
-    type: git
+    name: defra/epr-anti-virus-function-app
+    type: github
     ref: main
+    endpoint: DEFRA
   - repository: EprEventDispatcherFunctionApp
     name: RWD-CPR-EPR4P-ADO/epr-event-dispatcher-function-app
     type: git
