@@ -59,9 +59,10 @@ resources:
     type: git
     ref: main
   - repository: EprLoggingApi
-    name: RWD-CPR-EPR4P-ADO/epr-logging-api
-    type: git
+    name: defra/epr-logging-api
+    type: github
     ref: main
+    endpoint: DEFRA
   - repository: EprRegulatorEnrolmentFrontend
     name: RWD-CPR-EPR4P-ADO/epr-regulator-enrolment-frontend
     type: git
