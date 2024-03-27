@@ -89,9 +89,10 @@ resources:
     ref: main
     endpoint: DEFRA
   - repository: EprEventDispatcherFunctionApp
-    name: RWD-CPR-EPR4P-ADO/epr-event-dispatcher-function-app
-    type: git
+    name: defra/epr-event-dispatcher-function-app
+    type: github
     ref: main
+    endpoint: DEFRA
   - repository: EprPomApiSubmissionStatus
     name: RWD-CPR-EPR4P-ADO/epr_pom_api_submission_status
     type: git
