@@ -51,9 +51,10 @@ resources:
     type: git
     ref: main
   - repository: PomSubmissionCheckSplitter
-    name: RWD-CPR-EPR4P-ADO/epr_pom_func_submission_check_splitter
-    type: git
+    name: defra/epr_pom_func_submission_check_splitter
+    type: github
     ref: main
+    endpoint: DEFRA
   - repository: EprPackagingFrontend
     name: RWD-CPR-EPR4P-ADO/epr_packaging_frontend
     type: git
