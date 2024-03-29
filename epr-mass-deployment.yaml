@@ -103,9 +103,10 @@ resources:
     type: git
     ref: main
   - repository: EprPomFuncProducerValidation
-    name: RWD-CPR-EPR4P-ADO/epr_pom_func_producer_validation
-    type: git
+    name: defra/epr_pom_func_producer_validation
+    type: github
     ref: main
+    endpoint: DEFRA
   - repository: EprRegistrationValidationFunctionApp
     name: RWD-CPR-EPR4P-ADO/epr-registration-validation-function-app
     type: git
