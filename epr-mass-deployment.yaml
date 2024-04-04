@@ -77,9 +77,10 @@ resources:
     type: git
     ref: main
   - repository: FacadeAccountMicroservice
-    name: RWD-CPR-EPR4P-ADO/facade-account-microservice
-    type: git
+    name: defra/facade-account-microservice
+    type: github
     ref: main
+    endpoint: DEFRA
   - repository: FrontendObligationcheckerMicroservice
     name: RWD-CPR-EPR4P-ADO/epr-obligationchecker-frontend
     type: git
