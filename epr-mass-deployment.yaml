@@ -48,9 +48,10 @@ resources:
     ref: main
     endpoint: DEFRA
   - repository: FrontendAccountManagementMicroservice
-    name: RWD-CPR-EPR4P-ADO/frontend-accountmanagement-microservice
-    type: git
+    name: defra/epr-frontend-accountmanagement-microservice
+    type: github
     ref: main
+    endpoint: DEFRA
   - repository: PomSubmissionCheckSplitter
     name: defra/epr_pom_func_submission_check_splitter
     type: github
