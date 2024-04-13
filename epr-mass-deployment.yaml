@@ -67,9 +67,10 @@ resources:
     ref: main
     endpoint: DEFRA
   - repository: EprRegulatorEnrolmentFrontend
-    name: RWD-CPR-EPR4P-ADO/epr-regulator-enrolment-frontend
-    type: git
+    name: defra/epr-regulator-enrolment-frontend
+    type: github
     ref: main
+    endpoint: DEFRA
   - repository: EprRegulatorService
     name: RWD-CPR-EPR4P-ADO/epr_regulator_service
     type: git
