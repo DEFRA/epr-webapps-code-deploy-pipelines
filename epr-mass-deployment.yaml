@@ -77,9 +77,10 @@ resources:
     ref: main
     endpoint: DEFRA
   - repository: EprRegulatorServiceFacade
-    name: RWD-CPR-EPR4P-ADO/epr_regulator_service_facade
-    type: git
+    name: defra/epr_regulator_service_facade
+    type: github
     ref: main
+    endpoint: DEFRA
   - repository: FacadeAccountMicroservice
     name: defra/epr-facade-account-microservice
     type: github
