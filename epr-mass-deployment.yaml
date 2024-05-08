@@ -21,6 +21,8 @@ parameters:
   - Team-7_Oscar
   - Team-8_Pre-TST
   - Team-9_Ops
+  - Team-10_Willow
+  - Team-11_Pondscrum
 - name: envToDeploy
   displayName: 'Target environment to deploy'
   default: development
@@ -83,6 +85,21 @@ resources:
     endpoint: DEFRA
   - repository: FacadeAccountMicroservice
     name: defra/epr-facade-account-microservice
+    type: github
+    ref: main
+    endpoint: DEFRA
+  - repository: EprPrnAccreditationFrontEnd
+    name: defra/epr-prn-accreditation-front-end
+    type: github
+    ref: main
+    endpoint: DEFRA
+  - repository: EprPrnAccreditationFacade
+    name: defra/epr-prn-accreditation-facade
+    type: github
+    ref: main
+    endpoint: DEFRA
+  - repository: EprPrnAccreditationBackEnd
+    name: defra/epr-prn-accreditation-back-end
     type: github
     ref: main
     endpoint: DEFRA
