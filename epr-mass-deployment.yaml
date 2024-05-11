@@ -104,9 +104,10 @@ resources:
     ref: main
     endpoint: DEFRA
   - repository: FrontendObligationcheckerMicroservice
-    name: RWD-CPR-EPR4P-ADO/epr-obligationchecker-frontend
-    type: git
+    name: defra/epr-obligationchecker-frontend
+    type: github
     ref: main
+    endpoint: DEFRA
   - repository: EprAntiVirusFunctionApp
     name: defra/epr-anti-virus-function-app
     type: github
