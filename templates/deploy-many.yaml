@@ -94,7 +94,7 @@ stages:
         teamName: ${{ parameters.teamName }}
     - name: imageTag
       value: $[variables.${{ service.appService }}]
-    - ${{ if or( eq(parameters.envToDeploy, 'development'), eq(parameters.envToDeploy, 'qa-dev4') )}}:
+    - ${{ if or( eq(parameters.envToDeploy, 'development'), eq(parameters.envToDeploy, 'DEV4') )}}:
       - name: targetEnvironment
         value: development
     - ${{ else }}:
@@ -130,7 +130,7 @@ stages:
         teamName: ${{ parameters.teamName }}
     - name: imageTag
       value: $[variables.${{ service.appService }}]
-    - ${{ if or( eq(parameters.envToDeploy, 'development'), eq(parameters.envToDeploy, 'qa-dev4') )}}:
+    - ${{ if or( eq(parameters.envToDeploy, 'development'), eq(parameters.envToDeploy, 'DEV4') )}}:
       - name: targetEnvironment
         value: development
     - ${{ else }}:
@@ -166,7 +166,7 @@ stages:
         teamName: ${{ parameters.teamName }}
     - name: imageTag
       value: $[variables.${{ service.appService }}]
-    - ${{ if or( eq(parameters.envToDeploy, 'development'), eq(parameters.envToDeploy, 'qa-dev4') )}}:
+    - ${{ if or( eq(parameters.envToDeploy, 'development'), eq(parameters.envToDeploy, 'DEV4') )}}:
       - name: targetEnvironment
         value: development
     - ${{ else }}:
@@ -202,7 +202,7 @@ stages:
         teamName: ${{ parameters.teamName }}
     - name: imageTag
       value: $[variables.${{ service.appService }}]
-    - ${{ if or( eq(parameters.envToDeploy, 'development'), eq(parameters.envToDeploy, 'qa-dev4') )}}:
+    - ${{ if or( eq(parameters.envToDeploy, 'development'), eq(parameters.envToDeploy, 'DEV4') )}}:
       - name: targetEnvironment
         value: development
     - ${{ else }}:
