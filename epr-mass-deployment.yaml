@@ -55,7 +55,7 @@ resources:
     ref: main
     endpoint: DEFRA
   - repository: PomSubmissionCheckSplitter
-    name: defra/epr_pom_func_submission_check_splitter
+    name: defra/epr-pom-func-submission-check-splitter
     type: github
     ref: main
     endpoint: DEFRA
@@ -74,12 +74,12 @@ resources:
     ref: main
     endpoint: DEFRA
   - repository: EprRegulatorService
-    name: defra/epr_regulator_service
+    name: defra/epr-regulator-service
     type: github
     ref: main
     endpoint: DEFRA
   - repository: EprRegulatorServiceFacade
-    name: defra/epr_regulator_service_facade
+    name: defra/epr-regulator-service-facade
     type: github
     ref: main
     endpoint: DEFRA
@@ -127,7 +127,7 @@ resources:
     type: git
     ref: main
   - repository: EprPomFuncProducerValidation
-    name: defra/epr_pom_func_producer_validation
+    name: defra/epr-pom-func-producer-validation
     type: github
     ref: main
     endpoint: DEFRA
