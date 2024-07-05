@@ -67,9 +67,6 @@ resources:
     type: github
     ref: main
     endpoint: DEFRA
-  - repository: EprRegulatorEnrolmentFrontend
-    name: defra/epr-regulator-enrolment-frontend
-    type: github
     ref: main
     endpoint: DEFRA
   - repository: EprRegulatorService
@@ -84,21 +81,6 @@ resources:
     endpoint: DEFRA
   - repository: FacadeAccountMicroservice
     name: defra/epr-facade-account-microservice
-    type: github
-    ref: main
-    endpoint: DEFRA
-  - repository: EprPrnAccreditationFrontEnd
-    name: defra/epr-prn-accreditation-front-end
-    type: github
-    ref: main
-    endpoint: DEFRA
-  - repository: EprPrnAccreditationFacade
-    name: defra/epr-prn-accreditation-facade
-    type: github
-    ref: main
-    endpoint: DEFRA
-  - repository: EprPrnAccreditationBackEnd
-    name: defra/epr-prn-accreditation-back-end
     type: github
     ref: main
     endpoint: DEFRA
@@ -141,6 +123,10 @@ resources:
   - repository: CommonTemplates
     name: RWD-CPR-EPR4P-ADO/epr-webapps-code-deploy-templates
     type: git
+    ref: main
+  - repository: EprCommonDataApi
+    name: defra/epr-common-data-api
+    type: github
     ref: main
 
 variables:
