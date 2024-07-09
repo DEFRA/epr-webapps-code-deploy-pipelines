@@ -67,8 +67,6 @@ resources:
     type: github
     ref: main
     endpoint: DEFRA
-    ref: main
-    endpoint: DEFRA
   - repository: EprRegulatorService
     name: defra/epr-regulator-service
     type: github
@@ -128,6 +126,7 @@ resources:
     name: defra/epr-common-data-api
     type: github
     ref: main
+    endpoint: DEFRA
 
 variables:
   - ${{ if eq( parameters.envToDeploy, 'development') }}:
