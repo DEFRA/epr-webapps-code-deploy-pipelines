@@ -26,15 +26,13 @@ parameters:
   - repoName: EprLoggingApi
     varPath: pipelines/vars/
     appService: DEVRWDWEBWAx403
-  - repoName: EprRegulatorEnrolmentFrontend
-    varPath: pipelines/vars/
-    appService: DEVRWDWEBWAx414
   - repoName: EprRegulatorService
     varPath: pipelines/vars/
     appService: DEVRWDWEBWAx411
   - repoName: FrontendObligationcheckerMicroservice
     varPath: vars/
     appService: DEVRWDWEBWAx401
+  
 - name: functions
   type: object
   default:
