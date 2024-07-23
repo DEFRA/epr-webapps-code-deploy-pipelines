@@ -66,6 +66,9 @@ parameters:
   - repoName: EprPomApiSubmissionStatus
     varPath: pipelines/vars/
     appService: DEVRWDWEBWAx408
+  - repoName: EprCommonDataAPi
+    varPath: pipelines/vars/
+    appService: DEVRWDWEBWAx415
   - repoName: EprPomApiWeb
     varPath: pipelines/vars/
     appService: DEVRWDWEBWAx409

@@ -101,6 +101,11 @@ resources:
     name: RWD-CPR-EPR4P-ADO/epr_pom_api_submission_status
     type: git
     ref: main
+  - repository: EprCommonDataAPi
+    name: defra/epr-common-data-api
+    type: github
+    ref: main
+    endpoint: DEFRA
   - repository: EprPomApiWeb
     name: RWD-CPR-EPR4P-ADO/epr_pom_api_web
     type: git
