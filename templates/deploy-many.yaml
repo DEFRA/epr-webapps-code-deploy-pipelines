@@ -51,6 +51,12 @@ parameters:
   - repoName: EprRegistrationValidationFunctionApp
     varPath: pipelines/vars/
     appService: DEVRWDWEBFAx404
+  - repoName: EprDocumentSchemaJobRunnerFunctionApp
+    varPath: pipelines/vars/
+    appService: DEVRWDWEBFAx406
+  - repoName: BackendAccountMicroservice
+    varPath: pipelines/vars/
+    appService: DEVRWDWEBFAx407
 - name: facades
   type: object
   default:
