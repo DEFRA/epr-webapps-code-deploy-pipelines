@@ -113,16 +113,23 @@ stages:
         imageTag: $(imageTag)
         azureSubscription: ${{ variables.azureSubscription }}
         acrName: $(acr.azureContainerRegistryName)
-        registryName: $(acr.repositoryName)
-        serviceName: ${{ variables.serviceName }}
+        ${{ if eq(service.repoName, 'BackendAccountMicroservice') }}:
+          registryName: $(validationApiRepository)
+          serviceName: $(validationApiServiceName)
+        ${{ else }}:
+          registryName: $(acr.repositoryName)
+          serviceName: ${{ variables.serviceName }}
         targetEnvironment: ${{ variables.targetEnvironment }}
     - template: templates/restart-service.yaml@CommonTemplates
       parameters:
         subscriptionName: ${{ variables.azureSubscription }}
         webResourceGroupName: ${{ parameters.webResourceGroupName }}
-        serviceName: ${{ variables.serviceName }}
+        ${{ if eq(service.repoName, 'BackendAccountMicroservice') }}:
+          serviceName: $(validationApiServiceName)'
+        ${{ else }}:
+          serviceName: ${{ variables.serviceName }}
         targetEnvironment: ${{ variables.targetEnvironment }}
-
+        
 - ${{ each service in parameters.backendService }}:
   - stage: Deploy_${{ service.repoName }}_to_${{ service.appService }}
     dependsOn:
