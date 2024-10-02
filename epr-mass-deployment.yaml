@@ -38,10 +38,7 @@ parameters:
 
 resources:
   repositories:
-  #- repository: AutomationTesting
-  #  name: RWD-CPR-EPR4P-ADO/epr-playwright-bdd
-  #  type: git
-  #  ref: automation-testing-build-pipeline
+
    # The repo will be reference the repo by a release tag (if the releaseVersion parameter contains 'release') otherwise it will pull down the main branch.
   - repository: EprAppConfigSettings
     name: RWD-CPR-EPR4P-ADO/epr-app-config-settings
@@ -134,6 +131,10 @@ resources:
     endpoint: DEFRA
   - repository: CommonTemplates
     name: RWD-CPR-EPR4P-ADO/epr-webapps-code-deploy-templates
+    type: git
+    ref: feature/re-enable-testing
+  - repository: AutomationTesting
+    name: RWD-CPR-EPR4P-ADO/epr-playwright-bdd
     type: git
     ref: main
 
