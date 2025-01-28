@@ -1,0 +1,325 @@
+trigger: none
+pr: none
+pool: DEFRA-COMMON-ubuntu2004-SSV3
+
+parameters:
+- name: updateSettings
+  type: boolean
+  displayName: 'Update app service configurations'
+  default: true
+- name: teamName
+  displayName: 'Select a dev environment to deploy to:    (works only with "development" as target env)'
+  default: ''
+  type: string
+  values:
+  - DEV1
+  - DEV2
+  - DEV3
+  - DEV5
+  - DEV6
+  - DEV7
+  - DEV8
+  - DEV9
+  - DEV10
+  - DEV11
+  - DEV12
+  - DEV13
+  - DEV14
+  - DEV15
+
+- name: envToDeploy
+  displayName: 'Target environment to deploy'
+  default: development
+  type: string
+  values:
+  - development
+  - tst
+  - preprod
+  - prod
+- name: releaseVersion
+  displayName: 'Release version (e.g. Release-2.8.2). In development environments you probably want to use latest as this will deploy from main branch using the latest commit)'
+  default: 'latest'
+  type: string
+
+resources:
+  # The below code sets this pipeline to auto run as soon as the infra pipeline is succesful; but commenting these lines 
+  # of code now, as the passing of 'teamName' parameter value is a challenge for now
+  # pipelines:
+  # - pipeline: MassInfraDeployment  # The pipeline that triggers this one
+  #   source: '\EPR Infrastructure - CCoE\EPR Services Infrastructure - CCoE\WIP Alternative Deployment\Build-up Infrastructure'
+  #   trigger: 
+  #     branches:
+  #       include:
+  #       - 'feature/buildInfra'
+
+  repositories:
+  - repository: AutomationTesting
+    name: RWD-CPR-EPR4P-ADO/epr-playwright-bdd
+    type: git
+    ref: main
+   # The repo will be reference the repo by a release tag (if the releaseVersion parameter contains 'release') otherwise it will pull down the main branch.
+  - repository: EprAppConfigSettings
+    name: RWD-CPR-EPR4P-ADO/epr-app-config-settings
+    type: git
+   # ref: ${{ replace(replace(contains(parameters.releaseVersion, 'RELEASE'),'True',replace('refs/tags/RELEASETAG','RELEASETAG', parameters.releaseVersion)),'False','main') }}
+    ref: main  
+
+  - repository: CommonTemplates
+    name: RWD-CPR-EPR4P-ADO/epr-webapps-code-deploy-templates
+    type: git
+    ref: main
+
+    #FA 01
+  - repository: EventDispatcherFunctionApp
+    name: defra/epr-event-dispatcher-function-app
+    type: github
+    ref: main
+    endpoint: DEFRA
+    #FA 02
+  - repository: PomFuncProducerValidation
+    name: defra/epr-pom-func-producer-validation
+    type: github
+    ref: main
+    endpoint: DEFRA
+    #FA 03
+  - repository: PomSubmissionCheckSplitter
+    name: defra/epr-pom-func-submission-check-splitter
+    type: github
+    ref: main
+    endpoint: DEFRA
+    #FA 04
+  - repository: RegistrationValidationFunctionApp
+    name: RWD-CPR-EPR4P-ADO/epr-registration-validation-function-app
+    type: git
+    ref: main
+    #FA 05
+  - repository: AntiVirusFunctionApp
+    name: defra/epr-anti-virus-function-app
+    type: github
+    ref: main
+    endpoint: DEFRA
+   # FA 06
+  - repository: DocumentSchemaJobRunnerFunctionApp
+    name: defra/epr-document-schema-job-runner-function-app
+    type: github
+    ref: main
+    endpoint: DEFRA
+
+    #FA 07 and WA #07
+  - repository: BackendAccountMicroservice
+    name: RWD-CPR-EPR4P-ADO/backend-account-microservice
+    type: git
+    ref: main
+
+    # FA 08
+  - repository: SubsidiaryBulkUploadFunctionApp
+    name: defra/epr-subsidiary-func-bulk-upload
+    type: github
+    ref: main
+    endpoint: DEFRA
+
+   #FA 09
+  - repository: PaymentMopUpFunctionApp
+    name: defra/epr-payment-mopup
+    type: github
+    ref: main
+    endpoint: DEFRA
+
+   #FA 10
+  - repository: PRNObligationCalculationsFunctionApp
+    name: defra/epr-prn-obligationcalculations-function
+    type: github
+    ref: main
+    endpoint: DEFRA
+
+     #FA 11
+  - repository: CalculatorServiceFunctionApp
+    name: defra/epr-calculator-service
+    type: github
+    ref: main
+    endpoint: DEFRA
+
+    #FA 12
+  - repository: PRNIntegrationFunctionApp
+    name: defra/epr-prn-integration-function
+    type: github
+    ref: main
+    endpoint: DEFRA
+ 
+  # WA 01
+  - repository: FrontendObligationcheckerMicroservice
+    name: defra/epr-obligationchecker-frontend
+    type: github
+    ref: main
+    endpoint: DEFRA
+
+  # WA 02
+  - repository: FrontendAccountCreationMicroservice
+    name: defra/epr-frontend-accountcreation-microservice
+    type: github
+    ref: main
+    endpoint: DEFRA
+
+   # WA 03  
+  - repository: EprLoggingApi
+    name: defra/epr-logging-api
+    type: github
+    ref: main
+    endpoint: DEFRA
+
+    #WA 04
+  - repository: FacadeAccountMicroservice
+    name: defra/epr-facade-account-microservice
+    type: github
+    ref: main
+    endpoint: DEFRA  
+
+   #  WA 05
+  - repository: FrontendAccountManagementMicroservice
+    name: defra/epr-frontend-accountmanagement-microservice
+    type: github
+    ref: main
+    endpoint: DEFRA
+  
+    #WA 06
+  - repository: RegulatorServiceFacade
+    name: defra/epr-regulator-service-facade
+    type: github
+    ref: main
+    endpoint: DEFRA   
+  
+     #WA 08
+  - repository: PomApiSubmissionStatus
+    name: RWD-CPR-EPR4P-ADO/epr_pom_api_submission_status
+    type: git
+    ref: main
+ 
+     #WA 09
+  - repository: PomApiWeb
+    name: RWD-CPR-EPR4P-ADO/epr_pom_api_web
+    type: git
+    ref: main
+ 
+  # WA 10
+  - repository: PackagingFrontend
+    name: RWD-CPR-EPR4P-ADO/epr_packaging_frontend
+    type: git
+    ref: main
+
+  # WA 11  
+  - repository: RegulatorService
+    name: defra/epr-regulator-service
+    type: github
+    ref: main
+    endpoint: DEFRA
+
+    #  WA 12
+  - repository: RegulatorAccountManagementMicroservice
+    name: defra/epr-frontend-accountmanagement-microservice
+    type: github
+    ref: main
+    endpoint: DEFRA
+  
+    #WA 13
+  - repository: RegulatorAccountFacade
+    name: defra/epr-facade-account-microservice
+    type: github
+    ref: main
+    endpoint: DEFRA  
+  
+   #WA 15
+  - repository: CommonDataApI
+    name: defra/epr-common-data-api
+    type: github
+    ref: main
+    endpoint: DEFRA  
+
+   # WA 18
+  - repository: PRNCommonBackend
+    name: defra/epr-prn-common-backend
+    type: github
+    ref: main
+    endpoint: DEFRA
+
+    #WA 21
+  - repository: CalculatorFrontend
+    name: defra/epr-calculator-frontend
+    type: github
+    ref: main
+    endpoint: DEFRA
+
+    #WA 22
+  - repository: CalculatorAPI
+    name: defra/epr-calculator-api
+    type: github
+    ref: main
+    endpoint: DEFRA
+
+    #WA 23
+  - repository: PaymentFrontend
+    name: defra/epr-payment-frontend
+    type: github
+    ref: main
+    endpoint: DEFRA
+
+    #WA 24
+  - repository: PaymentFacade
+    name: defra/epr-payment-facade
+    type: github
+    ref: main
+    endpoint: DEFRA
+
+    #WA 25
+  - repository: PaymentService
+    name: defra/epr-payment-service
+    type: github
+    ref: main
+    endpoint: DEFRA
+
+variables:
+  - ${{ if eq( parameters.envToDeploy, 'development') }}:
+    - name: teamName
+      value: ${{ parameters.teamName }}
+  - ${{ else }}:
+    - name: teamName
+      value: ${{ parameters.envToDeploy }}
+  - template: pipelines/templates/env-specific-config.yaml@EprAppConfigSettings
+    parameters:
+      teamName: ${{ variables.teamName }}
+
+stages:
+
+  - ${{ if eq( parameters.updateSettings, 'true') }}:
+    - stage: UpdateSettings
+      variables:
+        - name: settingsDir
+          value: $(Build.SourcesDirectory)/${{ lower(variables.environmentName) }}
+      jobs:
+        - job: UpdateSettings
+          displayName: Update Settings
+          pool: $(agentPool)
+          steps:
+            - checkout: EprAppConfigSettings
+            - template: pipelines/templates/mass-configuration-template.yaml@EprAppConfigSettings
+              parameters:
+                subscriptionName: ${{ variables.subscriptionName }}
+                webResourceGroupName: ${{ variables.webResourceGroupName }}
+                restartApp: false
+                ${{ if and( ne(parameters.teamName, 'tst'), ne(parameters.teamName, 'preprod'), ne(parameters.teamName, 'prod'), ne(parameters.teamName, 'DEV8')) }}:
+                  useDevConfig: true
+                  configDirectory: $(Pipeline.Workspace)/s/dev/config
+                ${{ else }}:
+                  configDirectory: $(settingsDir)
+                environmentSpoke: $(environmentSpoke)
+                configTemplateInputDirectory: $(Pipeline.Workspace)/s/dev
+
+
+ 
+  - template: templates/deploy-all.yaml
+    parameters:
+        teamName: ${{ parameters.teamName }}
+        envToDeploy: ${{ parameters.envToDeploy }}
+        webResourceGroupName: ${{ variables.webResourceGroupName }}
+        updateSettings: ${{ parameters.updateSettings }}
+    
+ 

@@ -11,79 +11,132 @@ parameters:
 - name: frontends
   type: object
   default:
-  - repoName: FrontendAccountCreationMicroservice
-    varPath: pipelines/vars/
-    appService: DEVRWDWEBWAx402
-  - repoName: FrontendAccountManagementMicroservice
-    varPath: pipelines/vars/
-    appService: DEVRWDWEBWAx405
-  - repoName: FrontendAccountManagementMicroservice
-    varPath: pipelines/vars-regulator/
-    appService: DEVRWDWEBWAx412
-  - repoName: EprPackagingFrontend
-    varPath: pipelines/vars/
-    appService: DEVRWDWEBWAx410
-  - repoName: EprLoggingApi
-    varPath: pipelines/vars/
-    appService: DEVRWDWEBWAx403
-  - repoName: EprRegulatorService
-    varPath: pipelines/vars/
-    appService: DEVRWDWEBWAx411
   - repoName: FrontendObligationcheckerMicroservice
     varPath: vars/
     appService: DEVRWDWEBWAx401
+  - repoName: FrontendAccountCreationMicroservice
+    varPath: pipelines/vars/
+    appService: DEVRWDWEBWAx402
+  - repoName: EprLoggingApi
+    varPath: pipelines/vars/
+    appService: DEVRWDWEBWAx403
+  - repoName: FrontendAccountManagementMicroservice
+    varPath: pipelines/vars/
+    appService: DEVRWDWEBWAx405
+  - repoName: PackagingFrontend
+    varPath: pipelines/vars/
+    appService: DEVRWDWEBWAx410
+  - repoName: RegulatorService
+    varPath: pipelines/vars/
+    appService: DEVRWDWEBWAx411
+  - repoName: RegulatorAccountManagementMicroservice
+    varPath: pipelines/vars-regulator/
+    appService: DEVRWDWEBWAx412
+  - repoName: CalculatorFrontend
+    varPath: pipelines/vars/
+    appService: DEVRWDWEBWAx421
+  - repoName: PaymentFrontend
+    varPath: pipelines/vars/
+    appService: DEVRWDWEBWAx423
+ 
   
 - name: functions
   type: object
   default:
+  - repoName: EventDispatcherFunctionApp
+    varPath: pipelines/vars/
+    appService: DEVRWDWEBFAx401
+  - repoName: PomFuncProducerValidation
+    varPath: pipelines/vars/
+    appService: DEVRWDWEBFAx402
   - repoName: PomSubmissionCheckSplitter
     varPath: pipelines/vars/
     appService: DEVRWDWEBFAx403
-  - repoName: EprAntiVirusFunctionApp
-    varPath: pipelines/vars/
-    appService: DEVRWDWEBFAx405
-  - repoName: EprEventDispatcherFunctionApp
-    varPath: pipelines/vars/
-    appService: DEVRWDWEBFAx401
-  - repoName: EprPomFuncProducerValidation
-    varPath: pipelines/vars/
-    appService: DEVRWDWEBFAx402
-  - repoName: EprRegistrationValidationFunctionApp
+  - repoName: RegistrationValidationFunctionApp
     varPath: pipelines/vars/
     appService: DEVRWDWEBFAx404
-  - repoName: EprDocumentSchemaJobRunnerFunctionApp
+  - repoName: AntiVirusFunctionApp
+    varPath: pipelines/vars/
+    appService: DEVRWDWEBFAx405
+  - repoName: DocumentSchemaJobRunnerFunctionApp
     varPath: pipelines/vars/
     appService: DEVRWDWEBFAx406
   - repoName: BackendAccountMicroservice
     varPath: pipelines/vars/
     appService: DEVRWDWEBFAx407
+  - repoName: SubsidiaryBulkUploadFunctionApp
+    varPath: pipelines/vars/
+    appService: DEVRWDWEBFAx408
+  - repoName: PaymentMopUpFunctionApp
+    varPath: pipelines/vars/
+    appService: DEVRWDWEBFAx409
+  - repoName: PRNObligationCalculationsFunctionApp
+    varPath: pipelines/vars/
+    appService: DEVRWDWEBFAx410
+  - repoName: CalculatorServiceFunctionApp
+    varPath: pipelines/vars/
+    appService: DEVRWDWEBFAx411
+  - repoName: PRNIntegrationFunctionApp
+    varPath: pipelines/vars/
+    appService: DEVRWDWEBFAx412
+  
+
 - name: facades
   type: object
   default:
-  - repoName: EprRegulatorServiceFacade
-    varPath: pipelines/vars/
-    appService: DEVRWDWEBWAx406
   - repoName: FacadeAccountMicroservice
     varPath: pipelines/vars/
     appService: DEVRWDWEBWAx404
-  - repoName: FacadeAccountMicroservice
-    varPath: pipelines/vars-regulator/
-    appService: DEVRWDWEBWAx413
-  - repoName: EprPomApiSubmissionStatus
+  - repoName: RegulatorServiceFacade
+    varPath: pipelines/vars/
+    appService: DEVRWDWEBWAx406
+  - repoName: PomApiSubmissionStatus
     varPath: pipelines/vars/
     appService: DEVRWDWEBWAx408
-  - repoName: EprCommonDataAPi
-    varPath: pipelines/vars/
-    appService: DEVRWDWEBWAx415
-  - repoName: EprPomApiWeb
+  - repoName: PomApiWeb
     varPath: pipelines/vars/
     appService: DEVRWDWEBWAx409
+  - repoName: RegulatorAccountFacade
+    varPath: pipelines/vars-regulator/
+    appService: DEVRWDWEBWAx413 
+  - repoName: CommonDataAPi
+    varPath: pipelines/vars/
+    appService: DEVRWDWEBWAx415
+  - repoName: PaymentFacade
+    varPath: pipelines/vars/
+    appService: DEVRWDWEBWAx424
+    
 - name: backendService
   type: object
   default:
   - repoName: BackendAccountMicroservice
     varPath: pipelines/vars/
     appService: DEVRWDWEBWAx407
+    solutionFolder: src
+    projectFolder: BackendAccountService.Api
+    branchName: 'main-latest'
+
+  - repoName: PRNCommonBackend
+    varPath: pipelines/vars/
+    appService: DEVRWDWEBWAx418
+    solutionFolder: src
+    projectFolder: EPR.PRN.Backend.API
+    branchName: 'main-latest'
+
+  - repoName: CalculatorAPI
+    varPath: pipelines/vars/
+    appService: DEVRWDWEBWAx422
+    solutionFolder: src
+    projectFolder: BackendAccountService.Api
+    branchName: 'main-latest'
+
+  - repoName: PaymentService
+    varPath: pipelines/vars/
+    appService: DEVRWDWEBWAx425
+    solutionFolder: src
+    projectFolder: BackendAccountService.Api
+    branchName: 'main-latest'
+  
 
 stages:
 - ${{ each service in parameters.functions }}:
@@ -136,8 +189,7 @@ stages:
       dependsOn: UpdateSettings
     ${{ else }}:
       dependsOn: []
-    condition: always()
-
+  
     variables:
     - template: /vars/mass-deployment/app-deployment.yaml
       parameters:
@@ -169,13 +221,25 @@ stages:
         serviceName: ${{ variables.serviceName }}
         targetEnvironment: ${{ variables.targetEnvironment }}
 
+    - job: databaseMigrations
+      displayName: "Database Migration"
+      steps:
+        - template: templates/docker-run-sql-migration.yaml@CommonTemplates
+          parameters:
+            azureSubscription: ${{ variables.azureSubscription }}
+            solutionFolder: ${{ service.solutionFolder }}
+            projectFolder: ${{ service.projectFolder }}
+            azureContainerRegistryName: $(acr.azureContainerRegistryName)
+            repositoryName: $(acr.repositoryName)
+            branchName: ${{ service.branchName }}
+
 - ${{ each service in parameters.facades }}:
   - stage: Deploy_${{ service.repoName }}_to_${{ service.appService }}
     ${{ if eq( parameters.updateSettings, 'true') }}:
       dependsOn: UpdateSettings
     ${{ else }}:
       dependsOn: []
-    condition: always()
+ 
 
     variables:
     - template: /vars/mass-deployment/app-deployment.yaml
@@ -214,8 +278,7 @@ stages:
       dependsOn: UpdateSettings
     ${{ else }}:
       dependsOn: []
-    condition: always()
-
+ 
     variables:
     - template: /vars/mass-deployment/app-deployment.yaml
       parameters:
