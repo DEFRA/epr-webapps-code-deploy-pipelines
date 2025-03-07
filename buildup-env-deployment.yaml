@@ -35,6 +35,7 @@ parameters:
   - development
   - tst
   - preprod
+  - preprod2
   - prod
 - name: releaseVersion
   displayName: 'Release version (e.g. Release-2.8.2). In development environments you probably want to use latest as this will deploy from main branch using the latest commit)'
@@ -62,7 +63,7 @@ resources:
     name: RWD-CPR-EPR4P-ADO/epr-app-config-settings
     type: git
    # ref: ${{ replace(replace(contains(parameters.releaseVersion, 'RELEASE'),'True',replace('refs/tags/RELEASETAG','RELEASETAG', parameters.releaseVersion)),'False','main') }}
-    ref: main  
+    ref: main
 
   - repository: CommonTemplates
     name: RWD-CPR-EPR4P-ADO/epr-webapps-code-deploy-templates
@@ -305,7 +306,7 @@ stages:
                 subscriptionName: ${{ variables.subscriptionName }}
                 webResourceGroupName: ${{ variables.webResourceGroupName }}
                 restartApp: false
-                ${{ if and( ne(parameters.teamName, 'tst'), ne(parameters.teamName, 'preprod'), ne(parameters.teamName, 'prod'), ne(parameters.teamName, 'DEV8')) }}:
+                ${{ if and( ne(parameters.teamName, 'tst'), ne(parameters.teamName, 'preprod'),ne(parameters.teamName, 'preprod2'), ne(parameters.teamName, 'prod'), ne(parameters.teamName, 'DEV8')) }}:
                   useDevConfig: true
                   configDirectory: $(Pipeline.Workspace)/s/dev/config
                 ${{ else }}:

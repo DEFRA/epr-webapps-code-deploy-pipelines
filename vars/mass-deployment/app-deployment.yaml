@@ -27,6 +27,11 @@ variables:
       - template: pipelines/image-tags/${{ parameters.envToDeploy }}.yaml@EprAppConfigSettings
       - name: env
         value: PRE1
+  - ${{ elseif eq(parameters.envToDeploy, 'preprod2') }}:
+      - template: ${{ parameters.varPath }}/${{ parameters.envToDeploy }}.yaml@${{ parameters.resource }}
+      - template: pipelines/image-tags/${{ parameters.envToDeploy }}.yaml@EprAppConfigSettings
+      - name: env
+        value: PRE2
   - ${{ elseif eq(parameters.envToDeploy, 'prod') }}:
       - template: ${{ parameters.varPath }}/${{ parameters.envToDeploy }}.yaml@${{ parameters.resource }}
       - template: pipelines/image-tags/${{ parameters.envToDeploy }}.yaml@EprAppConfigSettings
