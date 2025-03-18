@@ -1,0 +1,4 @@
+
+variables:
+  azureSubscription: 'AZD-RWD-DEV15'
+  acr.azureContainerRegistryName: 'devrwdinfacf401'
