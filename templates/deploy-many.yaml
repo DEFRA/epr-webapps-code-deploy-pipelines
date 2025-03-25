@@ -32,6 +32,9 @@ parameters:
   - repoName: FrontendObligationcheckerMicroservice
     varPath: vars/
     appService: DEVRWDWEBWAx401
+  - repoName: EprPaymentFrontend
+    varPath: pipelines/vars/
+    appService: DEVRWDWEBWAx423
   
 - name: functions
   type: object
@@ -57,6 +60,15 @@ parameters:
   - repoName: BackendAccountMicroservice
     varPath: pipelines/vars/
     appService: DEVRWDWEBFAx407
+  - repoName: EprSubsidiaryFuncBulkUpload
+    varPath: pipelines/vars/
+    appService: DEVRWDWEBFAx408
+  - repoName: EprPaymentMopup
+    varPath: pipelines/vars/
+    appService: DEVRWDWEBFAx409
+  - repoName: eprprnintegrationfunction
+    varPath: pipelines/vars/
+    appService: DEVRWDWEBFAx412
 - name: facades
   type: object
   default:
@@ -78,12 +90,21 @@ parameters:
   - repoName: EprPomApiWeb
     varPath: pipelines/vars/
     appService: DEVRWDWEBWAx409
+  - repoName: EprPaymentFacade
+    varPath: pipelines/vars/
+    appService: DEVRWDWEBWAx424
 - name: backendService
   type: object
   default:
   - repoName: BackendAccountMicroservice
     varPath: pipelines/vars/
     appService: DEVRWDWEBWAx407
+  - repoName: eprprncommonbackend
+    varPath: pipelines/vars/
+    appService: DEVRWDWEBWAx418
+  - repoName: EprPaymentService
+    varPath: pipelines/vars/
+    appService: DEVRWDWEBWAx425
 
 stages:
 - ${{ each service in parameters.functions }}:

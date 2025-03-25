@@ -134,6 +134,50 @@ resources:
     type: github
     ref: main
     endpoint: DEFRA
+
+  - repository: EprSubsidiaryFuncBulkUpload
+    name: defra/epr-subsidiary-func-bulk-upload
+    type: github
+    ref: main
+    endpoint: DEFRA
+
+  - repository: EprPaymentService
+    name: defra/epr-payment-service
+    type: github
+    ref: main
+    endpoint: DEFRA
+
+  - repository: EprPaymentFacade
+    name: defra/epr-payment-facade
+    type: github
+    ref: main
+    endpoint: DEFRA
+
+  - repository: EprPaymentFrontend
+    name: defra/epr-payment-frontend
+    type: github
+    ref: main
+    endpoint: DEFRA
+
+  - repository: EprPaymentMopup
+    name: defra/epr-payment-mopup
+    type: github
+    ref: main
+    endpoint: DEFRA
+
+  - repository: EprPrnCommonBackend
+    name: defra/epr-prn-common-backend
+    type: github
+    ref: main
+    endpoint: DEFRA
+
+  - repository: EprPrnIntegrationFunction
+    name: defra/epr-prn-integration-function
+    type: github
+    ref: main
+    endpoint: DEFRA
+
+
   - repository: CommonTemplates
     name: RWD-CPR-EPR4P-ADO/epr-webapps-code-deploy-templates
     type: git
