@@ -37,3 +37,8 @@ variables:
       - template: pipelines/image-tags/${{ parameters.envToDeploy }}.yaml@EprAppConfigSettings
       - name: env
         value: PRD1
+  - ${{ elseif eq(parameters.envToDeploy, 'dev15') }}:
+      - template: ${{ parameters.varPath }}/${{ parameters.envToDeploy }}.yaml@${{ parameters.resource }}
+      - template: pipelines/image-tags/${{ parameters.envToDeploy }}.yaml@EprAppConfigSettings
+      - name: env
+        value: DEV15        

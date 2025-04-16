@@ -184,7 +184,7 @@ resources:
   - repository: AutomationTesting
     name: RWD-CPR-EPR4P-ADO/epr-playwright-bdd
     type: git
-    ref: main
+    ref: develop-template-fix
 
 
 variables:
@@ -215,7 +215,7 @@ stages:
                 subscriptionName: ${{ variables.subscriptionName }}
                 webResourceGroupName: ${{ variables.webResourceGroupName }}
                 restartApp: false
-                ${{ if and( ne(parameters.teamName, 'tst'), ne(parameters.teamName, 'preprod'), ne(parameters.teamName, 'prod'), ne(parameters.teamName, 'DEV8')) }}:
+                ${{ if and( ne(parameters.teamName, 'tst'), ne(parameters.teamName, 'dev15'), ne(parameters.teamName, 'preprod'), ne(parameters.teamName, 'prod'), ne(parameters.teamName, 'DEV8')) }}:
                   useDevConfig: true
                   configDirectory: $(Pipeline.Workspace)/s/dev/config
                 ${{ else }}:
