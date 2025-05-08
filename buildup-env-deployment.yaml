@@ -145,6 +145,13 @@ resources:
     type: github
     ref: main
     endpoint: DEFRA
+
+  #   #FA 13
+  # - repository: PRNStatusUpdateFunctionApp
+  #   name: defra/epr-prn-status-function-app
+  #   type: github
+  #   ref: main
+  #   endpoint: DEFRA
  
   # WA 01
   - repository: FrontendObligationcheckerMicroservice
@@ -234,6 +241,20 @@ resources:
     ref: main
     endpoint: DEFRA  
 
+   #WA 16
+  - repository: PRNRepExpFrontend
+    name: defra/epr-prn-rep-exp-frontend
+    type: github
+    ref: main
+    endpoint: DEFRA  
+
+  #  #WA 17
+  # - repository: PRNRepExpFacade
+  #   name: defra/epr-prn-rep-exp-facade
+  #   type: github
+  #   ref: main
+  #   endpoint: DEFRA  
+
    # WA 18
   - repository: PRNCommonBackend
     name: defra/epr-prn-common-backend
@@ -275,6 +296,13 @@ resources:
     type: github
     ref: main
     endpoint: DEFRA
+
+  #  #WA 26
+  # - repository: EprCalculatorFssAPI
+  #   name: defra/epr-calculator-fss-api
+  #   type: github
+  #   ref: main
+  #   endpoint: DEFRA
 
 variables:
   - ${{ if eq( parameters.envToDeploy, 'development') }}:
