@@ -32,7 +32,7 @@ parameters:
   - repoName: RegulatorAccountManagementMicroservice
     varPath: pipelines/vars-regulator/
     appService: DEVRWDWEBWAx412
-  - repoName: PrnFrontend
+  - repoName: PRNRepExpFrontend
     varPath: pipelines/vars/
     appService: DEVRWDWEBWAx416
   - repoName: CalculatorFrontend
@@ -108,15 +108,15 @@ parameters:
   - repoName: CommonDataAPi
     varPath: pipelines/vars/
     appService: DEVRWDWEBWAx415
-  # - repoName: PrnFacade
-  #   varPath: pipelines/vars/
-  #   appService: DEVRWDWEBWAx417
+  - repoName: PRNRepExpFacade
+    varPath: pipelines/vars/
+    appService: DEVRWDWEBWAx417
   - repoName: PaymentFacade
     varPath: pipelines/vars/
     appService: DEVRWDWEBWAx424
-  # - repoName: CalculatorFssAPI
-  #   varPath: pipelines/vars/
-  #   appService: DEVRWDWEBWAx426
+  - repoName: CalculatorFssAPI
+    varPath: pipelines/vars/
+    appService: DEVRWDWEBWAx426
     
 - name: backendService
   type: object

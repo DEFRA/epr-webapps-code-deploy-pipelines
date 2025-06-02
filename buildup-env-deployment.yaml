@@ -1,6 +1,6 @@
 trigger: none
 pr: none
-pool: DEFRA-COMMON-ubuntu2004-SSV3
+pool: DEFRA-COMMON-ubuntu2204-SSV3
 
 parameters:
 - name: updateSettings
@@ -42,16 +42,6 @@ parameters:
   type: string
 
 resources:
-  # The below code sets this pipeline to auto run as soon as the infra pipeline is succesful; but commenting these lines 
-  # of code now, as the passing of 'teamName' parameter value is a challenge for now
-  # pipelines:
-  # - pipeline: MassInfraDeployment  # The pipeline that triggers this one
-  #   source: '\EPR Infrastructure - CCoE\EPR Services Infrastructure - CCoE\WIP Alternative Deployment\Build-up Infrastructure'
-  #   trigger: 
-  #     branches:
-  #       include:
-  #       - 'feature/buildInfra'
-
   repositories:
   - repository: AutomationTesting
     name: RWD-CPR-EPR4P-ADO/epr-playwright-bdd
@@ -61,8 +51,7 @@ resources:
   - repository: EprAppConfigSettings
     name: RWD-CPR-EPR4P-ADO/epr-app-config-settings
     type: git
-   # ref: ${{ replace(replace(contains(parameters.releaseVersion, 'RELEASE'),'True',replace('refs/tags/RELEASETAG','RELEASETAG', parameters.releaseVersion)),'False','main') }}
-    ref: main
+    ref: ${{ replace(replace(contains(parameters.releaseVersion, 'RELEASE'),'True',replace('refs/tags/RELEASETAG','RELEASETAG', parameters.releaseVersion)),'False','main') }}
 
   - repository: CommonTemplates
     name: RWD-CPR-EPR4P-ADO/epr-webapps-code-deploy-templates
@@ -248,12 +237,12 @@ resources:
     ref: main
     endpoint: DEFRA  
 
-  #  #WA 17
-  # - repository: PRNRepExpFacade
-  #   name: defra/epr-prn-rep-exp-facade
-  #   type: github
-  #   ref: main
-  #   endpoint: DEFRA  
+   #WA 17
+  - repository: PRNRepExpFacade
+    name: defra/epr-prn-rep-exp-facade
+    type: github
+    ref: main
+    endpoint: DEFRA  
 
    # WA 18
   - repository: PRNCommonBackend
@@ -297,12 +286,12 @@ resources:
     ref: main
     endpoint: DEFRA
 
-  #  #WA 26
-  # - repository: EprCalculatorFssAPI
-  #   name: defra/epr-calculator-fss-api
-  #   type: github
-  #   ref: main
-  #   endpoint: DEFRA
+   #WA 26
+  - repository: CalculatorFssAPI
+    name: defra/epr-calculator-fss-api
+    type: github
+    ref: main
+    endpoint: DEFRA
 
 variables:
   - ${{ if eq( parameters.envToDeploy, 'development') }}:
@@ -314,34 +303,37 @@ variables:
   - template: pipelines/templates/env-specific-config.yaml@EprAppConfigSettings
     parameters:
       teamName: ${{ variables.teamName }}
-
+  - name: settingsDir
+    value: $(Build.SourcesDirectory)/${{ lower(variables.environmentName) }}
+  - name: configRepo
+    value: EprAppConfigSettings
+  - ${{ if and( ne(parameters.teamName, 'tst'), ne(parameters.teamName, 'preprod'), ne(parameters.teamName, 'preprod2'), ne(parameters.teamName, 'prod'), ne(parameters.teamName, 'DEV8'), ne(parameters.teamName, 'DEV15') ) }}:
+    - name: useDevConfig
+      value: true
+    - name: configDir
+      value: $(Pipeline.Workspace)/s/dev/config
+  - ${{ else }}:
+    - name: useDevConfig
+      value: false
+    - name: configDir
+      value: $(settingsDir)
+  
 stages:
 
   - ${{ if eq( parameters.updateSettings, 'true') }}:
     - stage: UpdateSettings
-      variables:
-        - name: settingsDir
-          value: $(Build.SourcesDirectory)/${{ lower(variables.environmentName) }}
       jobs:
-        - job: UpdateSettings
-          displayName: Update Settings
-          pool: $(agentPool)
-          steps:
-            - checkout: EprAppConfigSettings
-            - template: pipelines/templates/mass-configuration-template.yaml@EprAppConfigSettings
-              parameters:
-                subscriptionName: ${{ variables.subscriptionName }}
-                webResourceGroupName: ${{ variables.webResourceGroupName }}
-                restartApp: false
-                ${{ if and( ne(parameters.teamName, 'tst'), ne(parameters.teamName, 'preprod'),ne(parameters.teamName, 'preprod2'), ne(parameters.teamName, 'prod'), ne(parameters.teamName, 'DEV8'), ne(parameters.teamName, 'DEV15')) }}:
-                  useDevConfig: true
-                  configDirectory: $(Pipeline.Workspace)/s/dev/config
-                ${{ else }}:
-                  configDirectory: $(settingsDir)
-                environmentSpoke: $(environmentSpoke)
-                configTemplateInputDirectory: $(Pipeline.Workspace)/s/dev
-
-
+        - template: pipelines/templates/mass-configuration-template.yaml@EprAppConfigSettings
+          parameters:
+              restartApp: ${{ parameters.updateSettings }}
+              subscriptionName: ${{ variables.subscriptionName }}
+              webResourceGroupName: ${{ variables.webResourceGroupName }}
+              useDevConfig: ${{ variables.useDevConfig }}
+              configDirectory: ${{ variables.configDir }}
+              environmentSpoke: $(environmentSpoke)
+              environmentGroup: ${{ variables.environmentGroup }}
+              configTemplateInputDirectory: $(Pipeline.Workspace)/s/dev
+              configRepo: ${{ variables.configRepo }}
  
   - template: templates/deploy-all.yaml
     parameters:
