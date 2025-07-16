@@ -9,7 +9,7 @@ parameters:
   default: false
 - name: teamName
   displayName: 'Select a dev environment to deploy to:    (works only with "development" as target env)'
-  default: 'DEV6'
+  default: 'DEV1'
   type: string
   values:
   - DEV1
@@ -41,6 +41,45 @@ parameters:
   displayName: 'Release version (e.g. Release-2.8.2). In development environments you probably want to use latest as this will deploy from main branch using the latest commit)'
   default: 'latest'
   type: string
+- name: AppList
+  type: object
+  default:
+    - DEVRWDWEBWAX401
+    - DEVRWDWEBWAX402
+    - DEVRWDWEBWAX403
+    - DEVRWDWEBWAX404
+    - DEVRWDWEBWAX405
+    - DEVRWDWEBWAX406
+    - DEVRWDWEBWAX407
+    - DEVRWDWEBWAX408
+    - DEVRWDWEBWAX409
+    - DEVRWDWEBWAX410
+    - DEVRWDWEBWAX411
+    - DEVRWDWEBWAX412
+    - DEVRWDWEBWAX413
+    - DEVRWDWEBWAX415
+    - DEVRWDWEBWAX416
+    - DEVRWDWEBWAX417
+    - DEVRWDWEBWAX418
+    - DEVRWDWEBWAX421
+    - DEVRWDWEBWAX422
+    - DEVRWDWEBWAX423
+    - DEVRWDWEBWAX424
+    - DEVRWDWEBWAX425
+    - DEVRWDWEBWAX426
+    - DEVRWDWEBFAX401
+    - DEVRWDWEBFAX402
+    - DEVRWDWEBFAX403
+    - DEVRWDWEBFAX404
+    - DEVRWDWEBFAX405
+    - DEVRWDWEBFAX406
+    - DEVRWDWEBFAX407
+    - DEVRWDWEBFAX408
+    - DEVRWDWEBFAX409
+    - DEVRWDWEBFAX410
+    - DEVRWDWEBFAX411
+    - DEVRWDWEBFAX412
+    - DEVRWDWEBFAX413
 
 resources:
   repositories:
@@ -237,3 +276,4 @@ stages:
       envToDeploy: ${{ parameters.envToDeploy }}
       webResourceGroupName: ${{ variables.webResourceGroupName }}
       updateSettings: ${{ parameters.updateSettings }}
+      AppList: ${{ parameters.AppList }}

@@ -1,5 +1,9 @@
 
 parameters:
+- name: AppList
+  type: object
+  default:
+    - placeholder
 - name: teamName
   type: string
 - name: envToDeploy
@@ -113,6 +117,7 @@ stages:
       dependsOn: UpdateSettings
     ${{ else }}:
       dependsOn: []
+    condition: ${{ containsValue( parameters.AppList, service.appService) }}  
     variables:
     - template: /vars/mass-deployment/app-deployment.yaml
       parameters:
@@ -157,7 +162,7 @@ stages:
       dependsOn: UpdateSettings
     ${{ else }}:
       dependsOn: []
-    condition: always()
+    condition: ${{ containsValue( parameters.AppList, service.appService) }}
 
     variables:
     - template: /vars/mass-deployment/app-deployment.yaml
@@ -196,7 +201,7 @@ stages:
       dependsOn: UpdateSettings
     ${{ else }}:
       dependsOn: []
-    condition: always()
+    condition: ${{ containsValue( parameters.AppList, service.appService) }}
 
     variables:
     - template: /vars/mass-deployment/app-deployment.yaml
@@ -230,41 +235,41 @@ stages:
         targetEnvironment: ${{ variables.targetEnvironment }}
 
 - ${{ each service in parameters.frontends }}:
-  - stage: Deploy_${{ service.repoName }}_to_${{ service.appService }}
-    ${{ if eq( parameters.updateSettings, 'true') }}:
-      dependsOn: UpdateSettings
-    ${{ else }}:
-      dependsOn: []
-    condition: always()
+    - stage: Deploy_${{ service.repoName }}_to_${{ service.appService }}
+      ${{ if eq( parameters.updateSettings, 'true') }}:
+        dependsOn: UpdateSettings
+      ${{ else }}:
+        dependsOn: []
+      condition: ${{ containsValue( parameters.AppList, service.appService) }}
 
-    variables:
-    - template: /vars/mass-deployment/app-deployment.yaml
-      parameters:
-        envToDeploy: ${{ parameters.envToDeploy }}
-        resource: ${{ service.repoName }}
-        varPath: ${{service.varPath}}
-        teamName: ${{ parameters.teamName }}
-    - name: imageTag
-      value: $[variables.${{ service.appService }}]
-    - ${{ if or( eq(parameters.envToDeploy, 'development'), eq(parameters.envToDeploy, 'DEV4') )}}:
-      - name: targetEnvironment
-        value: development
-    - ${{ else }}:
-      - name: targetEnvironment
-        value: ${{ variables.env }}
-    jobs:
-    - template: epr-deployment-pipeline.yaml@CommonTemplates
-      parameters:
-        imageTag: $(imageTag)
-        azureSubscription: ${{ variables.azureSubscription }}
-        acrName: $(acr.azureContainerRegistryName)
-        registryName: $(acr.repositoryName)
-        serviceName: ${{ variables.serviceName }}
-        targetEnvironment: ${{ variables.targetEnvironment }}
-    - template: templates/restart-service.yaml@CommonTemplates
-      parameters:
-        subscriptionName: ${{ variables.azureSubscription }}
-        webResourceGroupName: ${{ parameters.webResourceGroupName }}
-        serviceName: ${{ variables.serviceName }}
-        targetEnvironment: ${{ variables.targetEnvironment }}
+      variables:
+      - template: /vars/mass-deployment/app-deployment.yaml
+        parameters:
+          envToDeploy: ${{ parameters.envToDeploy }}
+          resource: ${{ service.repoName }}
+          varPath: ${{service.varPath}}
+          teamName: ${{ parameters.teamName }}
+      - name: imageTag
+        value: $[variables.${{ service.appService }}]
+      - ${{ if or( eq(parameters.envToDeploy, 'development'), eq(parameters.envToDeploy, 'DEV4') )}}:
+        - name: targetEnvironment
+          value: development
+      - ${{ else }}:
+        - name: targetEnvironment
+          value: ${{ variables.env }}
+      jobs:
+      - template: epr-deployment-pipeline.yaml@CommonTemplates
+        parameters:
+          imageTag: $(imageTag)
+          azureSubscription: ${{ variables.azureSubscription }}
+          acrName: $(acr.azureContainerRegistryName)
+          registryName: $(acr.repositoryName)
+          serviceName: ${{ variables.serviceName }}
+          targetEnvironment: ${{ variables.targetEnvironment }}
+      - template: templates/restart-service.yaml@CommonTemplates
+        parameters:
+          subscriptionName: ${{ variables.azureSubscription }}
+          webResourceGroupName: ${{ parameters.webResourceGroupName }}
+          serviceName: ${{ variables.serviceName }}
+          targetEnvironment: ${{ variables.targetEnvironment }}
 
