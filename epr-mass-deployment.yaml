@@ -265,7 +265,7 @@ stages:
               webResourceGroupName: ${{ variables.webResourceGroupName }}
               useDevConfig: ${{ variables.useDevConfig }}
               configDirectory: ${{ variables.configDir }}
-              environmentSpoke: $(environmentSpoke)
+              environmentSpoke: ${{ variables.environmentSpoke }}
               environmentGroup: ${{ variables.environmentGroup }}
               configTemplateInputDirectory: $(Pipeline.Workspace)/s/dev
               configRepo: ${{ variables.configRepo }}
