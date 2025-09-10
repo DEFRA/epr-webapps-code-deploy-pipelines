@@ -288,7 +288,7 @@ variables:
     value: $(Build.SourcesDirectory)/${{ lower(variables.environmentName) }}
   - name: configRepo
     value: EprAppConfigSettings
-  - ${{ if and( ne(toLower(parameters.teamName), 'tst'), ne(toLower(parameters.teamName), 'preprod'), ne(toLower(parameters.teamName), 'preprod2'), ne(toLower(parameters.teamName), 'prod'), ne(toLower(parameters.teamName), 'dev8'), ne(toLower(parameters.teamName), 'dev15') ) }}:
+  - ${{ if and( ne(parameters.teamName, 'tst'), ne(parameters.teamName, 'preprod'), ne(parameters.teamName, 'preprod2'), ne(parameters.teamName, 'prod'), ne(parameters.teamName, 'DEV8'), ne(parameters.teamName, 'DEV15') ) }}:
     - name: useDevConfig
       value: true
     - name: configDir
