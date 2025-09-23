@@ -36,6 +36,9 @@ parameters:
   - repoName: FrontendObligationcheckerMicroservice
     varPath: vars/
     appService: DEVRWDWEBWAx401
+  - repoName: EprCaculatorFrontend
+    varPath: pipelines/vars/
+    appService: DEVRWDWEBWAx421
   - repoName: EprPaymentFrontend
     varPath: pipelines/vars/
     appService: DEVRWDWEBWAx423
@@ -70,6 +73,12 @@ parameters:
   - repoName: EprPaymentMopup
     varPath: pipelines/vars/
     appService: DEVRWDWEBFAx409
+  - repoName: EprPrnObligationsCalculationsFunction
+    varPath: pipelines/vars/
+    appService: DEVRWDWEBFAx410
+  - repoName: EprCaculatorService
+    varPath: pipelines/vars/
+    appService: DEVRWDWEBFAx411
   - repoName: eprprnintegrationfunction
     varPath: pipelines/vars/
     appService: DEVRWDWEBFAx412
@@ -106,9 +115,15 @@ parameters:
   - repoName: eprprncommonbackend
     varPath: pipelines/vars/
     appService: DEVRWDWEBWAx418
+  - repoName: EprCaculatorApi
+    varPath: pipelines/vars/
+    appService: DEVRWDWEBWAx422
   - repoName: EprPaymentService
     varPath: pipelines/vars/
     appService: DEVRWDWEBWAx425
+  - repoName: EprCaculatorFSSApi
+    varPath: pipelines/vars/
+    appService: DEVRWDWEBWAx426
 
 stages:
 - ${{ each service in parameters.functions }}:

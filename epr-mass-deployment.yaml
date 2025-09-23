@@ -217,6 +217,36 @@ resources:
     type: github
     ref: main
     endpoint: DEFRA
+  
+  - repository: EprPrnObligationsCalculationsFunction
+    name: defra/epr-prn-obligationcalculations-function
+    type: github
+    ref: main
+    endpoint: DEFRA
+  
+  - repository: EprCaculatorFrontend
+    name: defra/epr-calculator-frontend
+    type: github
+    ref: main
+    endpoint: DEFRA
+  
+  - repository: EprCaculatorService
+    name: defra/epr-calculator-service
+    type: github
+    ref: main
+    endpoint: DEFRA
+
+  - repository: EprCaculatorApi
+    name: defra/epr-calculator-api
+    type: github
+    ref: main
+    endpoint: DEFRA
+  
+  - repository: EprCaculatorFSSApi
+    name: defra/epr-calculator-fss-api
+    type: github
+    ref: main
+    endpoint: DEFRA
 
 
   - repository: CommonTemplates
