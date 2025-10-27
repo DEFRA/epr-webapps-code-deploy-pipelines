@@ -165,9 +165,10 @@ resources:
     ref: main
     endpoint: DEFRA
   - repository: EprRegistrationValidationFunctionApp
-    name: RWD-CPR-EPR4P-ADO/epr-registration-validation-function-app
-    type: git
+    name: defra/epr-registration-validation-function-app
+    type: github
     ref: main
+    endpoint: DEFRA
   - repository: BackendAccountMicroservice
     name: RWD-CPR-EPR4P-ADO/backend-account-microservice
     type: git
