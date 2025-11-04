@@ -106,9 +106,10 @@ resources:
     ref: main
     endpoint: DEFRA
   - repository: EprPackagingFrontend
-    name: RWD-CPR-EPR4P-ADO/epr_packaging_frontend
-    type: git
+    name: defra/epr-packaging-frontend
+    type: github
     ref: main
+    endpoint: DEFRA
   - repository: EprLoggingApi
     name: defra/epr-logging-api
     type: github
@@ -170,9 +171,10 @@ resources:
     ref: main
     endpoint: DEFRA
   - repository: BackendAccountMicroservice
-    name: RWD-CPR-EPR4P-ADO/backend-account-microservice
-    type: git
+    name: defra/epr-backend-account-microservice
+    type: github
     ref: main
+    endpoint: DEFRA
   - repository: EprDocumentSchemaJobRunnerFunctionApp
     name: defra/epr-document-schema-job-runner-function-app
     type: github
