@@ -78,9 +78,10 @@ resources:
     endpoint: DEFRA
     #FA 04
   - repository: RegistrationValidationFunctionApp
-    name: RWD-CPR-EPR4P-ADO/epr-registration-validation-function-app
-    type: git
+    name: defra/epr-registration-validation-function-app
+    type: github
     ref: main
+    endpoint: DEFRA
     #FA 05
   - repository: AntiVirusFunctionApp
     name: defra/epr-anti-virus-function-app
@@ -96,9 +97,10 @@ resources:
 
     #FA 07 and WA #07
   - repository: BackendAccountMicroservice
-    name: RWD-CPR-EPR4P-ADO/backend-account-microservice
-    type: git
+    name: defra/epr-backend-account-microservice
+    type: github
     ref: main
+    endpoint: DEFRA
 
     # FA 08
   - repository: SubsidiaryBulkUploadFunctionApp
@@ -180,21 +182,24 @@ resources:
   
      #WA 08
   - repository: PomApiSubmissionStatus
-    name: RWD-CPR-EPR4P-ADO/epr_pom_api_submission_status
-    type: git
+    name: defra/epr-pom-api-submission-status
+    type: github
     ref: main
+    endpoint: DEFRA
  
      #WA 09
   - repository: PomApiWeb
-    name: RWD-CPR-EPR4P-ADO/epr_pom_api_web
-    type: git
+    name: defra/epr-pom-api-web
+    type: github
     ref: main
+    endpoint: DEFRA
  
   # WA 10
   - repository: PackagingFrontend
-    name: RWD-CPR-EPR4P-ADO/epr_packaging_frontend
-    type: git
+    name: defra/epr-packaging-frontend
+    type: github
     ref: main
+    endpoint: DEFRA
 
   # WA 11  
   - repository: RegulatorService
