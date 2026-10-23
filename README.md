@@ -35,11 +35,11 @@ The application repository must have deployment variables in the format of (exam
 
 ``` yaml
 variables:
-  azureSubscription: 'AZD-RWD-DEV5'
+  azureSubscription: 'AZD-RWD-DEV4'
   docker.imageName: 'facadeaccountcreationrepository'
   acr.azureContainerRegistryName: 'devrwdinfac1401'
   acr.repositoryName: 'facadeaccountcreationrepository'
-  serviceName: 'devrwdwebwa5404'
+  serviceName: 'devrwdwebwa4404'
 ```
 
 ## Contributing to this project
